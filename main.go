@@ -136,6 +136,26 @@ func main() {
 		return
 	}
 
+	// 降级计划
+	data = map[string]string{
+		"plan_id":           "477",
+		"payment_frequency": "monthly",
+	}
+	encode, _ = json.Marshal(data)
+	_, err = client.R().
+		SetQueryParams(map[string]string{
+			"type": "change_subscription_plan",
+			"_cpt": cpt,
+		}).
+		SetFormData(map[string]string{
+			"postArray": string(encode),
+		}).
+		Post("/ajax/advanced_ajax_handler.php")
+	if err != nil {
+		fmt.Printf("降级计划时出错: %v\n", err)
+		return
+	}
+
 	fmt.Println("订阅计划修改成功")
 
 	// 取用户 token
